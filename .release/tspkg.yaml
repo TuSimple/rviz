@@ -1,0 +1,9 @@
+build_info:
+  date: 2019-09-28 10:54:53.794803
+  host: desk-170.bj.tusimple.ai
+  user: zyjiang
+deps:
+  zoro: any
+  yaml-cpp: 0.6.2
+name: rviz
+version: 1.0.10

@@ -31,9 +31,9 @@ macro(build_yaml_cpp)
   # This specific version (past the current latest release of 0.5.3) is required to make
   # yaml-cpp relocatable, hopefully it is released again soon.
   # See: https://github.com/jbeder/yaml-cpp/pull/538
-  ExternalProject_Add(yaml_cpp-86ae3a5
-    URL https://github.com/jbeder/yaml-cpp/archive/86ae3a5aa7e2109d849b2df89176d6432a35265d.zip
-    URL_MD5 28091f7f66086a84b14da1f5d798c6a6
+  ExternalProject_Add(yaml_cpp-0.6.2
+    URL https://github.com/jbeder/yaml-cpp/archive/yaml-cpp-0.6.2.zip
+    URL_MD5 132d42bc018213dda0671ee2ea971523
     TIMEOUT 600
     LOG_CONFIGURE ${should_log}
     LOG_BUILD ${should_log}
