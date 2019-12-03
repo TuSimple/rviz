@@ -165,7 +165,7 @@ VisualizationManager::VisualizationManager(
   window_manager_(wm),
   clock_(clock),
   private_(new VisualizationManagerPrivate),
-  executor_(std::make_shared<rclcpp::executors::SingleThreadedExecutor>()),
+  executor_(std::make_shared<rclcpp::executors::MultiThreadedExecutor>()),
   rviz_ros_node_(ros_node_abstraction)
 {
   // visibility_bit_allocator_ is listed after default_visibility_bit_

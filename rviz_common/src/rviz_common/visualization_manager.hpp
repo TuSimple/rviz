@@ -398,7 +398,7 @@ private:
   uint32_t default_visibility_bit_;
   BitAllocator visibility_bit_allocator_;
   QString help_path_;
-  rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_;
+  rclcpp::executors::MultiThreadedExecutor::SharedPtr executor_;
   ros_integration::RosNodeAbstractionIface::WeakPtr rviz_ros_node_;
 };
 
