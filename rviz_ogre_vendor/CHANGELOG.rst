@@ -2,6 +2,22 @@
 Changelog for package rviz_ogre_vendor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+7.0.3 (2019-11-13)
+------------------
+* Skip freetype2 dependencies (`#405 <https://github.com/ros2/rviz/issues/405>`_)
+* Contributors: Sean Yen
+
+7.0.2 (2019-10-23)
+------------------
+* Switch back to patch instead of git apply (`#470 <https://github.com/ros2/rviz/issues/470>`_)
+* Remove OGRE_BUILD_COMPONENT_SAMPLES cmake arg.
+* Contributors: Chris Lalancette
+
+7.0.1 (2019-10-04)
+------------------
+* Fix the rviz_ogre_vendor packaging.
+* Contributors: Chris Lalancette
+
 7.0.0 (2019-09-27)
 ------------------
 * Add .dsv file beside custom environment hook (`#449 <https://github.com/ros2/rviz/issues/449>`_)

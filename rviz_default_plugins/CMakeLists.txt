@@ -76,6 +76,7 @@ find_package(visualization_msgs REQUIRED)
 
 # These need to be added in the add_library() call so AUTOMOC detects them.
 set(rviz_default_plugins_headers_to_moc
+  include/rviz_default_plugins/displays/axes/axes_display.hpp
   include/rviz_default_plugins/displays/camera/camera_display.hpp
   include/rviz_default_plugins/displays/fluid_pressure/fluid_pressure_display.hpp
   include/rviz_default_plugins/displays/grid/grid_display.hpp
@@ -111,6 +112,7 @@ set(rviz_default_plugins_headers_to_moc
   include/rviz_default_plugins/displays/polygon/polygon_display.hpp
   include/rviz_default_plugins/displays/pose/pose_display.hpp
   include/rviz_default_plugins/displays/pose_array/pose_array_display.hpp
+  include/rviz_default_plugins/displays/pose_covariance/pose_with_covariance_display.hpp
   include/rviz_default_plugins/displays/range/range_display.hpp
   include/rviz_default_plugins/displays/relative_humidity/relative_humidity_display.hpp
   include/rviz_default_plugins/displays/robot_model/robot_model_display.hpp
@@ -136,6 +138,7 @@ set(rviz_default_plugins_headers_to_moc
 )
 
 set(rviz_default_plugins_source_files
+  src/rviz_default_plugins/displays/axes/axes_display.cpp
   src/rviz_default_plugins/displays/camera/camera_display.cpp
   src/rviz_default_plugins/displays/grid/grid_display.cpp
   src/rviz_default_plugins/displays/grid_cells/grid_cells_display.cpp
@@ -187,6 +190,8 @@ set(rviz_default_plugins_source_files
   src/rviz_default_plugins/displays/pose/pose_display_selection_handler.cpp
   src/rviz_default_plugins/displays/pose_array/pose_array_display.cpp
   src/rviz_default_plugins/displays/pose_array/flat_arrows_array.cpp
+  src/rviz_default_plugins/displays/pose_covariance/pose_with_covariance_display.cpp
+  src/rviz_default_plugins/displays/pose_covariance/pose_with_cov_selection_handler.cpp
   src/rviz_default_plugins/displays/range/range_display.cpp
   src/rviz_default_plugins/displays/relative_humidity/relative_humidity_display.cpp
   src/rviz_default_plugins/displays/robot_model/robot_model_display.cpp
@@ -302,7 +307,7 @@ install(
 )
 
 install(
-  DIRECTORY "${CMAKE_SOURCE_DIR}/icons"
+  DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/icons"
   DESTINATION "share/${PROJECT_NAME}"
 )
 
@@ -324,7 +329,7 @@ if(BUILD_TESTING)
   find_package(sensor_msgs REQUIRED)
   find_package(visualization_msgs REQUIRED)
 
-  install(DIRECTORY "${CMAKE_SOURCE_DIR}/test/ogre_media_resources/test_meshes"
+  install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/ogre_media_resources/test_meshes"
     DESTINATION "share/rviz_default_plugins"
     USE_SOURCE_PERMISSIONS)
 
@@ -632,6 +637,20 @@ if(BUILD_TESTING)
     target_link_libraries(transformer_guard_test ${TEST_LINK_LIBRARIES})
   endif()
 
+  ament_add_gtest(axes_display_visual_test
+    test/rviz_default_plugins/displays/axes/axes_display_visual_test.cpp
+    test/rviz_default_plugins/page_objects/axes_display_page_object.cpp
+    ${SKIP_VISUAL_TESTS}
+    TIMEOUT 180)
+  if(TARGET axes_display_visual_test)
+    target_include_directories(axes_display_visual_test PUBLIC
+      ${TEST_INCLUDE_DIRS}
+      ${rviz_visual_testing_framework_INCLUDE_DIRS})
+    target_link_libraries(axes_display_visual_test
+      ${TEST_LINK_LIBRARIES}
+      rviz_visual_testing_framework::rviz_visual_testing_framework)
+  endif()
+
   ament_add_gtest(camera_display_visual_test
     test/rviz_default_plugins/displays/camera/camera_display_visual_test.cpp
     test/rviz_default_plugins/publishers/camera_info_publisher.hpp
@@ -901,6 +920,21 @@ if(BUILD_TESTING)
     target_link_libraries(pose_display_visual_test
       ${TEST_LINK_LIBRARIES}
       rviz_visual_testing_framework::rviz_visual_testing_framework)
+  endif()
+
+  ament_add_gtest(pose_with_covariance_display_visual_test
+          test/rviz_default_plugins/displays/pose_covariance/pose_with_covariance_display_visual_test.cpp
+          test/rviz_default_plugins/page_objects/pose_with_covariance_display_page_object.cpp
+          test/rviz_default_plugins/publishers/pose_with_covariance_publisher.hpp
+          ${SKIP_VISUAL_TESTS}
+          TIMEOUT 180)
+  if(TARGET pose_with_covariance_display_visual_test)
+    target_include_directories(pose_with_covariance_display_visual_test PUBLIC
+            ${TEST_INCLUDE_DIRS}
+            ${rviz_visual_testing_framework_INCLUDE_DIRS})
+    target_link_libraries(pose_with_covariance_display_visual_test
+            ${TEST_LINK_LIBRARIES}
+            rviz_visual_testing_framework::rviz_visual_testing_framework)
   endif()
 
   ament_add_gtest(range_display_visual_test

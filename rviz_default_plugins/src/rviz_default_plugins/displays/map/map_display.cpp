@@ -77,59 +77,66 @@ MapDisplay::MapDisplay()
   update_topic_property_ = new rviz_common::properties::RosTopicProperty(
     "Update Topic", "",
     "", "Topic where updates to this map display are received. "
-    "Currently, this topic is read-only and will automatically be determined by the map topic. "
-    "If the map is received on 'map_topic', the display assumes to receive updates on "
-    "'map_topic_updates'.", this);
-  // Set the property to read only for now. Since it is not connected to any slot,
-  // we don't want to update it.
-  update_topic_property_->setReadOnly(true);
+    "This topic is automatically determined by the map topic. "
+    "If the map is received on 'map_topic', the display assumes updates are received on "
+    "'map_topic_updates'."
+    "This can be overridden in the UI by clicking on the topic and setting the desired topic.",
+    this, SLOT(updateMapUpdateTopic()));
 
   update_profile_property_ = new rviz_common::properties::QosProfileProperty(
     update_topic_property_, update_profile_);
 
-  alpha_property_ = new rviz_common::properties::FloatProperty("Alpha", 0.7f,
-      "Amount of transparency to apply to the map.",
-      this, SLOT(updateAlpha()));
+  alpha_property_ = new rviz_common::properties::FloatProperty(
+    "Alpha", 0.7f,
+    "Amount of transparency to apply to the map.",
+    this, SLOT(updateAlpha()));
   alpha_property_->setMin(0);
   alpha_property_->setMax(1);
 
-  color_scheme_property_ = new rviz_common::properties::EnumProperty("Color Scheme", "map",
-      "How to color the occupancy values.",
-      this, SLOT(updatePalette()));
+  color_scheme_property_ = new rviz_common::properties::EnumProperty(
+    "Color Scheme", "map",
+    "How to color the occupancy values.",
+    this, SLOT(updatePalette()));
   // Option values here must correspond to indices in palette_textures_ array in onInitialize()
   // below.
   color_scheme_property_->addOption("map", 0);
   color_scheme_property_->addOption("costmap", 1);
   color_scheme_property_->addOption("raw", 2);
 
-  draw_under_property_ = new rviz_common::properties::BoolProperty("Draw Behind", false,
-      "Rendering option, controls whether or not the map is always"
-      " drawn behind everything else.",
-      this, SLOT(updateDrawUnder()));
+  draw_under_property_ = new rviz_common::properties::BoolProperty(
+    "Draw Behind", false,
+    "Rendering option, controls whether or not the map is always"
+    " drawn behind everything else.",
+    this, SLOT(updateDrawUnder()));
 
-  resolution_property_ = new rviz_common::properties::FloatProperty("Resolution", 0,
-      "Resolution of the map. (not editable)", this);
+  resolution_property_ = new rviz_common::properties::FloatProperty(
+    "Resolution", 0,
+    "Resolution of the map. (not editable)", this);
   resolution_property_->setReadOnly(true);
 
-  width_property_ = new rviz_common::properties::IntProperty("Width", 0,
-      "Width of the map, in meters. (not editable)", this);
+  width_property_ = new rviz_common::properties::IntProperty(
+    "Width", 0,
+    "Width of the map, in meters. (not editable)", this);
   width_property_->setReadOnly(true);
 
-  height_property_ = new rviz_common::properties::IntProperty("Height", 0,
-      "Height of the map, in meters. (not editable)", this);
+  height_property_ = new rviz_common::properties::IntProperty(
+    "Height", 0,
+    "Height of the map, in meters. (not editable)", this);
   height_property_->setReadOnly(true);
 
-  position_property_ = new rviz_common::properties::VectorProperty("Position", Ogre::Vector3::ZERO,
-      "Position of the bottom left corner of the map, in meters. (not editable)",
-      this);
+  position_property_ = new rviz_common::properties::VectorProperty(
+    "Position", Ogre::Vector3::ZERO,
+    "Position of the bottom left corner of the map, in meters. (not editable)",
+    this);
   position_property_->setReadOnly(true);
 
   orientation_property_ = new rviz_common::properties::QuaternionProperty(
     "Orientation", Ogre::Quaternion::IDENTITY, "Orientation of the map. (not editable)", this);
   orientation_property_->setReadOnly(true);
 
-  transform_timestamp_property_ = new rviz_common::properties::BoolProperty("Use Timestamp", false,
-      "Use map header timestamp when transforming", this, SLOT(transformMap()));
+  transform_timestamp_property_ = new rviz_common::properties::BoolProperty(
+    "Use Timestamp", false,
+    "Use map header timestamp when transforming", this, SLOT(transformMap()));
 }
 
 MapDisplay::~MapDisplay()
@@ -197,7 +204,8 @@ void MapDisplay::subscribe()
   }
 
   if (topic_property_->isEmpty()) {
-    setStatus(rviz_common::properties::StatusProperty::Error,
+    setStatus(
+      rviz_common::properties::StatusProperty::Error,
       "Topic",
       QString("Error subscribing: Empty topic name"));
     return;
@@ -312,7 +320,8 @@ void MapDisplay::incomingUpdate(const map_msgs::msg::OccupancyGridUpdate::ConstS
     QString::number(update_messages_received_) + " update messages received");
 
   if (updateDataOutOfBounds(update)) {
-    setStatus(rviz_common::properties::StatusProperty::Error,
+    setStatus(
+      rviz_common::properties::StatusProperty::Error,
       "Update", "Update area outside of original map area.");
     return;
   }
@@ -359,8 +368,9 @@ void MapDisplay::createSwatches()
   const size_t maximum_number_swatch_splittings = 4;
 
   for (size_t i = 0; i < maximum_number_swatch_splittings; ++i) {
-    RVIZ_COMMON_LOG_INFO_STREAM("Trying to create a map of size " <<
-      width << " x " << height << " using " << number_swatches << " swatches");
+    RVIZ_COMMON_LOG_INFO_STREAM(
+      "Trying to create a map of size " <<
+        width << " x " << height << " using " << number_swatches << " swatches");
     swatches_.clear();
     try {
       tryCreateSwatches(width, height, resolution, swatch_width, swatch_height, number_swatches);
@@ -373,16 +383,18 @@ void MapDisplay::createSwatches()
       doubleSwatchNumber(swatch_width, swatch_height, number_swatches);
     }
   }
-  RVIZ_COMMON_LOG_ERROR_STREAM("Creating " << number_swatches << "failed. "
-    "This map is too large to be displayed by RViz.");
+  RVIZ_COMMON_LOG_ERROR_STREAM(
+    "Creating " << number_swatches << "failed. "
+      "This map is too large to be displayed by RViz.");
   swatches_.clear();
 }
 
 void MapDisplay::doubleSwatchNumber(
   size_t & swatch_width, size_t & swatch_height, int & number_swatches) const
 {
-  RVIZ_COMMON_LOG_ERROR_STREAM("Failed to create map using " << number_swatches << " swatches. "
-    "At least one swatch seems to need too much memory");
+  RVIZ_COMMON_LOG_ERROR_STREAM(
+    "Failed to create map using " << number_swatches << " swatches. "
+      "At least one swatch seems to need too much memory");
   if (swatch_width > swatch_height) {
     swatch_width /= 2;
   } else {
@@ -405,7 +417,8 @@ void MapDisplay::tryCreateSwatches(
     size_t effective_width = getEffectiveDimension(width, swatch_width, x);
     size_t effective_height = getEffectiveDimension(height, swatch_height, y);
 
-    swatches_.push_back(std::make_shared<Swatch>(
+    swatches_.push_back(
+      std::make_shared<Swatch>(
         scene_manager_,
         scene_node_,
         x, y,
@@ -442,7 +455,8 @@ void MapDisplay::showMap()
   }
 
   if (!validateFloats(current_map_)) {
-    setStatus(rviz_common::properties::StatusProperty::Error, "Map",
+    setStatus(
+      rviz_common::properties::StatusProperty::Error, "Map",
       "Message contained invalid floating point values (nans or infs)");
     return;
   }
@@ -469,8 +483,9 @@ void MapDisplay::showMap()
 
   setStatus(rviz_common::properties::StatusProperty::Ok, "Message", "Map received");
 
-  RVIZ_COMMON_LOG_DEBUG_STREAM("Received a " << current_map_.info.width << " X " <<
-    current_map_.info.height << " map @ " << current_map_.info.resolution << "m/pix\n");
+  RVIZ_COMMON_LOG_DEBUG_STREAM(
+    "Received a " << current_map_.info.width << " X " <<
+      current_map_.info.height << " map @ " << current_map_.info.resolution << "m/pix\n");
 
   showValidMap();
 }
@@ -573,10 +588,11 @@ void MapDisplay::transformMap()
 
   Ogre::Vector3 position;
   Ogre::Quaternion orientation;
-  if (!context_->getFrameManager()->transform(frame_, transform_time, current_map_.info.origin,
-    position, orientation) &&
-    !context_->getFrameManager()->transform(frame_, context_->getClock()->now(),
-    current_map_.info.origin, position, orientation))
+  if (!context_->getFrameManager()->transform(
+      frame_, transform_time, current_map_.info.origin, position, orientation) &&
+    !context_->getFrameManager()->transform(
+      frame_, rclcpp::Time(0, 0, context_->getClock()->get_clock_type()),
+      current_map_.info.origin, position, orientation))
   {
     setMissingTransformToFixedFrame(frame_);
     scene_node_->setVisible(false);

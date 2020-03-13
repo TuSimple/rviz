@@ -2,6 +2,15 @@
 Changelog for package rviz_visual_testing_framework
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+7.0.3 (2019-11-13)
+------------------
+
+7.0.2 (2019-10-23)
+------------------
+
+7.0.1 (2019-10-04)
+------------------
+
 7.0.0 (2019-09-27)
 ------------------
 * Fix typos in visual testing framework documentation (`#416 <https://github.com/ros2/rviz/issues/416>`_)

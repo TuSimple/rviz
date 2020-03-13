@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 project(rviz_ogre_vendor)
 
@@ -48,6 +48,10 @@ macro(build_freetype)
       -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/freetype_install
       ${extra_cmake_args}
       -Wno-dev
+      -DWITH_ZLIB=OFF
+      -DWITH_BZip2=OFF
+      -DWITH_PNG=OFF
+      -DWITH_HarfBuzz=OFF
   )
 
   install(
@@ -146,11 +150,7 @@ macro(build_ogre)
     list(APPEND extra_cmake_args "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
   endif()
 
-  # We need to patch some pragmas because the OgreVector cannot compile without warnings
-  if(WIN32)
-    set(patch_files patch.exe -p1 -N < ${CMAKE_CURRENT_SOURCE_DIR}/pragma-patch.diff &&)
-  endif()
-
+  find_package(Patch REQUIRED)
   include(ExternalProject)
   ExternalProject_Add(ogre-v1.12.1
     URL https://github.com/OGRECave/ogre/archive/v1.12.1.zip
@@ -175,11 +175,11 @@ macro(build_ogre)
       -DOGRE_BUILD_COMPONENT_JAVA:BOOL=FALSE
       -DOGRE_BUILD_COMPONENT_CSHARP:BOOL=FALSE
       -DOGRE_BUILD_COMPONENT_BITES:BOOL=FALSE
-      -DOGRE_BUILD_COMPONENT_SAMPLES:BOOL=FALSE
       ${extra_cmake_args}
       -Wno-dev
     PATCH_COMMAND
-      ${patch_files}
+      ${Patch_EXECUTABLE} -p1 -N < ${CMAKE_CURRENT_SOURCE_DIR}/pragma-patch.diff
+    COMMAND
       ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/FindFreetype.cmake ${CMAKE_CURRENT_BINARY_DIR}/ogre-v1.12.1-prefix/src/ogre-v1.12.1/CMake/Packages/FindFreetype.cmake
   )
 
