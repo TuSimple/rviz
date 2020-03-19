@@ -58,7 +58,7 @@ macro(build_freetype)
     DIRECTORY
       ${CMAKE_CURRENT_BINARY_DIR}/freetype_install/
     DESTINATION
-      ${CMAKE_INSTALL_PREFIX}/opt/rviz_ogre_vendor
+      ${CMAKE_INSTALL_PREFIX}/lib/rviz_ogre_vendor
   )
 endmacro()
 
@@ -96,7 +96,7 @@ macro(build_zlib)
     DIRECTORY
       ${CMAKE_CURRENT_BINARY_DIR}/zlib-install/
     DESTINATION
-      ${CMAKE_INSTALL_PREFIX}/opt/rviz_ogre_vendor
+      ${CMAKE_INSTALL_PREFIX}/lib/rviz_ogre_vendor
   )
 endmacro()
 
@@ -195,7 +195,7 @@ macro(build_ogre)
     DIRECTORY
       ${CMAKE_CURRENT_BINARY_DIR}/ogre_install/
     DESTINATION
-      ${CMAKE_INSTALL_PREFIX}/opt/rviz_ogre_vendor
+      ${CMAKE_INSTALL_PREFIX}/lib/rviz_ogre_vendor
   )
 endmacro()
 
@@ -211,7 +211,7 @@ build_ogre()
 if(WIN32)
   ament_environment_hooks(env_hook/rviz_ogre_vendor_library_path.bat)
   set(ENV_VAR_NAME "PATH")
-  set(ENV_VAR_VALUE "opt\\rviz_ogre_vendor\\bin")
+  set(ENV_VAR_VALUE "lib\\rviz_ogre_vendor\\bin")
 else()
   ament_environment_hooks(env_hook/rviz_ogre_vendor_library_path.sh)
   if(APPLE)
@@ -219,7 +219,7 @@ else()
   else()
     set(ENV_VAR_NAME "LD_LIBRARY_PATH")
   endif()
-  set(ENV_VAR_VALUE "opt/rviz_ogre_vendor/lib")
+  set(ENV_VAR_VALUE "lib/rviz_ogre_vendor/lib")
 endif()
 ament_environment_hooks(env_hook/rviz_ogre_vendor_library_path.dsv.in)
 

@@ -1,18 +1,18 @@
 # add the local Modules directory to the modules path
 if(WIN32)
-  set(OGRE_DIR "${@PROJECT_NAME@_DIR}/../../../opt/rviz_ogre_vendor/CMake")
-  set(OGRE_CMAKE_MODULE_DIR "${@PROJECT_NAME@_DIR}/../../../opt/rviz_ogre_vendor/CMake")
+  set(OGRE_DIR "${@PROJECT_NAME@_DIR}/../../../lib/rviz_ogre_vendor/CMake")
+  set(OGRE_CMAKE_MODULE_DIR "${@PROJECT_NAME@_DIR}/../../../lib/rviz_ogre_vendor/CMake")
   list(INSERT CMAKE_MODULE_PATH 0 ${OGRE_CMAKE_MODULE_DIR})
   message(STATUS "Prepending to CMAKE_MODULE_PATH: '${OGRE_CMAKE_MODULE_DIR}'")
 elseif(APPLE)
-  set(OGRE_DIR "${@PROJECT_NAME@_DIR}/../../../opt/rviz_ogre_vendor/CMake")
+  set(OGRE_DIR "${@PROJECT_NAME@_DIR}/../../../lib/rviz_ogre_vendor/CMake")
 else()
-  set(OGRE_DIR "${@PROJECT_NAME@_DIR}/../../../opt/rviz_ogre_vendor/lib/OGRE/cmake")
+  set(OGRE_DIR "${@PROJECT_NAME@_DIR}/../../../lib/rviz_ogre_vendor/lib/OGRE/cmake")
 endif()
 message(STATUS "Setting OGRE_DIR to: '${OGRE_DIR}'")
 
-set(FREETYPE_HOME "${rviz_ogre_vendor_DIR}/../../../opt/rviz_ogre_vendor")
-set(ZLIB_HOME "${rviz_ogre_vendor_DIR}/../../../opt/rviz_ogre_vendor")
+set(FREETYPE_HOME "${rviz_ogre_vendor_DIR}/../../../lib/rviz_ogre_vendor")
+set(ZLIB_HOME "${rviz_ogre_vendor_DIR}/../../../lib/rviz_ogre_vendor")
 
 find_package(OGRE REQUIRED NO_SYSTEM_ENVIRONMENT_PATH)
 message(STATUS "OGRE_LIBRARIES: ${OGRE_LIBRARIES}")
@@ -85,7 +85,7 @@ foreach(_lib IN LISTS OGRE_LIBRARIES)
     if(NOT Freetype_FOUND)
       # try newer method with exported targets
       set(freetype_DIR
-        "${rviz_ogre_vendor_DIR}/../../../opt/rviz_ogre_vendor/lib/cmake/freetype")
+        "${rviz_ogre_vendor_DIR}/../../../lib/rviz_ogre_vendor/lib/cmake/freetype")
       find_package(freetype CONFIG REQUIRED)
     endif()
     if(FREETYPE_LIBRARIES)
