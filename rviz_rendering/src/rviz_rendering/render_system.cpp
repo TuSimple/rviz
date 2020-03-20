@@ -301,9 +301,9 @@ RenderSystem::setPluginDirectory()
   std::string prefix_path;
   ament_index_cpp::get_resource("packages", "rviz_ogre_vendor", content, &prefix_path);
 #ifdef _WIN32
-  set_ogre_plugin_directory(prefix_path + "\\opt\\rviz_ogre_vendor\\bin\\");
+  set_ogre_plugin_directory(prefix_path + "\\lib\\rviz_ogre_vendor\\bin\\");
 #else
-  set_ogre_plugin_directory(prefix_path + "/opt/rviz_ogre_vendor/lib/OGRE/");
+  set_ogre_plugin_directory(prefix_path + "/lib/rviz_ogre_vendor/lib/OGRE/");
 #endif
 }
 

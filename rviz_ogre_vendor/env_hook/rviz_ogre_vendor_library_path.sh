@@ -9,8 +9,8 @@ fi
 unset _UNAME
 
 if [ $_IS_DARWIN -eq 0 ]; then
-  ament_prepend_unique_value LD_LIBRARY_PATH "$AMENT_CURRENT_PREFIX/opt/rviz_ogre_vendor/lib"
+  ament_prepend_unique_value LD_LIBRARY_PATH "$AMENT_CURRENT_PREFIX/lib/rviz_ogre_vendor/lib"
 else
-  ament_prepend_unique_value DYLD_LIBRARY_PATH "$AMENT_CURRENT_PREFIX/opt/rviz_ogre_vendor/lib"
+  ament_prepend_unique_value DYLD_LIBRARY_PATH "$AMENT_CURRENT_PREFIX/lib/rviz_ogre_vendor/lib"
 fi
 unset _IS_DARWIN
